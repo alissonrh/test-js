@@ -1,4 +1,4 @@
-import { WinningCombinations } from './winning-combinations';
+import call from './winning-combinations';
 
 test.each([
   [[1, 6, 6, 7, 2, 3], []],
@@ -30,6 +30,6 @@ test.each([
   [[11, 0, 0, 7, 4], [[7, [1, 2, 3]]]],
 ])
   ('when line is %j returns %j', (line, expected) => {
-    const received = WinningCombinations.call(line);
+    const received = call(line);
     expect(received).toEqual(expected);
   });

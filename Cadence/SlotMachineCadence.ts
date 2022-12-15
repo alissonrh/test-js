@@ -43,6 +43,15 @@ const anticipatorConfig: AnticipatorConfig = {
   defaultCadence: 0.25,
 };
 
+// TEST
+/* const anticipatorConfig: AnticipatorConfig = {
+  columnSize: 6,
+  minToAnticipate: 1,
+  maxToAnticipate: 2,
+  anticipateCadence: 2,
+  defaultCadence: 1,
+}; */
+
 /**
  * Game rounds with special symbols position that must be used to generate the SlotCadences.
  */
@@ -80,9 +89,24 @@ const slotMachineCadences: RoundsCadences = { roundOne: [], roundTwo: [], roundT
  * @param symbols Array<SlotCoordinate> positions of the special symbols. Example: [{ column: 0, row: 2 }, { column: 2, row: 3 }]
  * @returns SlotCadence Array of numbers representing the slot machine stop cadence.
  */
-function slotCadence(symbols: Array<SlotCoordinate>): SlotCadence {
-  // Magic
-  return [];
+
+export default function slotCadence(symbols: Array<SlotCoordinate>): SlotCadence {
+  const cadence: SlotCadence = [0]; //  Começa com o 0
+  let sumValue = 0
+
+  const startAnticipate: number = symbols[anticipatorConfig.minToAnticipate - 1]?.column // position 1
+  
+  const endAnticipate: number = symbols[anticipatorConfig.maxToAnticipate - 1]?.column // position 2 
+
+  for (let i = 0; i < anticipatorConfig.columnSize -1; i += 1) {
+    (startAnticipate <= i && (!endAnticipate ||endAnticipate > i) && startAnticipate !== endAnticipate) ?
+      sumValue = anticipatorConfig.anticipateCadence
+    :
+      sumValue = anticipatorConfig.defaultCadence;
+
+    cadence.push(cadence[i] + sumValue); 
+  }
+  return cadence;
 }
 
 /**
